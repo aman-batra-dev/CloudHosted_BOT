@@ -7,6 +7,13 @@ from discord.ext.commands import has_permissions,CheckFailure
 from discord.utils import get
 
 formats = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'tiff', 'psd', 'eps', 'raw', 'mp4', 'mp3', 'mov', 'wmv', 'flv', 'avi', 'avchd', 'webm', 'mkv', 'vob', 'ogg', 'ogv', 'gifv', 'm4v', 'm4v', 'mpg', 'mp2', 'mpeg', 'mpe', 'mpv', 'svi', '3gp', '3g2', 'wav']
+skill_set = {
+  '\N{PERSONAL COMPUTER}': 854341269533491220,
+  '\N{VIDEO GAME}': 854349627561607168,
+  '\N{CLAPPER BOARD}': 854350835596263502,
+  '\N{VIDEO CAMERA}': 854351097966755892,
+  '\N{BOOKMARK TABS}': 854351304729034792
+}
 profanity.load_censor_words_from_file("CensorWords.txt")
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix="!", intents=intents)
@@ -43,12 +50,12 @@ async def Check_Mod_Mention(message):
 @client.event
 async def on_ready():
   print('We Have Looged in as {0.user}'.format(client))
-
+  
 @client.event
-async def on_message(message):
+async def on_message(message): 
   if message.author == client.user:
     return
-  msgkick = message
+  msgkick = message 
   #msgBan = message
   message_content = message.content.lower()
   #if message.content.startswith('$Hello Manager'):
@@ -70,8 +77,8 @@ async def on_message(message):
     else:
       file = open(wl,'a')
       file.write('%s\n'%message.author.id)
-
-
+    
+  
   if '@everyone' in message.content or '@here' in message.content:
     await message.delete()
 
@@ -83,15 +90,15 @@ async def on_message(message):
     for link in readfl:
       if link in message.content:
         return  #check for links
-      else:
+      else:   
         await message.delete()
     filelinks.close()
-
+  
   #to delete images
   attachments = [f for f in message.attachments if f.filename.split('.')[-1] in formats]
   if attachments:
     await message.delete()
-
+    
   await clearShit(message)
 
 
@@ -99,16 +106,28 @@ async def check_rules_acceptance(channel,message,user,emoji):
   c_channel = client.get_channel(853571038817288242)
   msgID = 853589659295547402
   rules_msg = await c_channel.fetch_message(msgID)
-  roleID = 853166599329808445
+  roleID = 853166599329808445 
   guild = client.guilds[0]
   role = get(guild.roles, id=roleID)
   if emoji.name == '\N{THUMBS UP SIGN}' and role in user.roles and message == rules_msg:
     default_role = discord.utils.get(guild.roles, id=853166599329808445)
     new_role = discord.utils.get(guild.roles, id=853166897835278386)
-
+    
     await user.add_roles(new_role)
     await user.remove_roles(default_role)
 
+async def check_skill_aquired(message,user,emoji):
+  c_channel = client.get_channel(854341643289493515)
+  msgID = 854346395828617236
+  skill_msg = await c_channel.fetch_message(msgID)
+  guild = client.guilds[0]
+  member_role = discord.utils.get(guild.roles, id=853166897835278386)
+
+  for skill in skill_set:
+    if skill == emoji.name and member_role in user.roles and message == skill_msg:
+      assign_role = get(guild.roles,id = skill_set[skill])
+      await user.add_roles(assign_role)
+      await user.remove_roles(member_role)
 
 @client.event
 async def on_raw_reaction_add(payload):
@@ -118,13 +137,14 @@ async def on_raw_reaction_add(payload):
     user = payload.member
     emoji = payload.emoji
     await check_rules_acceptance(channel,message,user,emoji)
+    await check_skill_aquired(message,user,emoji)
 
 
 @client.event
 async def on_member_join(member):
   default_role = discord.utils.get(member.guild.roles, id=853166599329808445)
   await member.add_roles(default_role)
-
+                     
 @client.command(pass_context = True)
 @has_permissions(administrator=True)
 async def kick(ctx, member: discord.Member, *, reason=None):
@@ -138,4 +158,5 @@ async def kick_error(error, ctx):
 @client.command(pass_context = True)
 async def ban(ctx, member: discord.Member, *, reason=None):
      await member.ban(reason=reason)
+
 client.run('ODUyODI4MzYyNjU2OTcyODQx.YMMgTg.Fj1oMci9er59sesLyOp4AxOXeSY')
