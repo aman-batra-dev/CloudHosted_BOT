@@ -13,7 +13,6 @@ ajpy==0.0.4
 aniso8601==8.1.1
 apispec==3.3.1
 apispec-webframeworks==0.5.2
-apparmor==2.13.6
 appdirs==1.4.4
 argcomplete==1.8.1
 arrow==0.17.0
