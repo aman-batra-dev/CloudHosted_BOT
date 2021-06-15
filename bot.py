@@ -139,4 +139,4 @@ async def kick_error(error, ctx):
 @client.command(pass_context = True)
 async def ban(ctx, member: discord.Member, *, reason=None):
      await member.ban(reason=reason)
-client.run(os.getenv('TOKEN'))
+client.run('ODUyODI4MzYyNjU2OTcyODQx.YMMgTg.Fj1oMci9er59sesLyOp4AxOXeSY')
