@@ -85,7 +85,7 @@ async def on_message(message):
   await Check_Mod_Mention(message)
 
   if re.search(regex,message.content):
-    filelinks = open('AllowedLinks.txt','r')
+    filelinks = open('AllowedLinks','r')
     readfl = filelinks.read()
     for link in readfl:
       if link in message.content:
@@ -158,5 +158,6 @@ async def kick_error(error, ctx):
 @client.command(pass_context = True)
 async def ban(ctx, member: discord.Member, *, reason=None):
      await member.ban(reason=reason)
+
 
 client.run('ODUyODI4MzYyNjU2OTcyODQx.YMMgTg.Fj1oMci9er59sesLyOp4AxOXeSY')
