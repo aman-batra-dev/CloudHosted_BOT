@@ -85,7 +85,7 @@ async def on_message(message):
   await Check_Mod_Mention(message)
 
   if re.search(regex,message.content):
-    filelinks = open('AllowedLinks','r')
+    filelinks = open('AllowedLinks.txt','r')
     readfl = filelinks.read()
     for link in readfl:
       if link in message.content:
