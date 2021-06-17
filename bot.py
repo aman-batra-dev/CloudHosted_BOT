@@ -69,7 +69,7 @@ async def on_message(message):
         counter +=1
     
     file.writelines(f"{str(message.author.id)}\n")
-    if counter>5:
+    if counter>=3:
       await clearShit(message,counter)
       await message.channel.send('Spamming is not allowed!!')
       await message.channel.send('Warning For <@%s>!!! If you continue this behaviour you will be kick out!!'% message.author.id)
