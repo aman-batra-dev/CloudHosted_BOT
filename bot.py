@@ -5,6 +5,7 @@ from better_profanity import profanity
 from discord.ext import commands
 from discord.ext.commands import has_permissions,CheckFailure
 from discord.utils import get
+import asyncio
 
 formats = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'tiff', 'psd', 'eps', 'raw', 'mp4', 'mp3', 'mov', 'wmv', 'flv', 'avi', 'avchd', 'webm', 'mkv', 'vob', 'ogg', 'ogv', 'gifv', 'm4v', 'm4v', 'mpg', 'mp2', 'mpeg', 'mpe', 'mpv', 'svi', '3gp', '3g2', 'wav']
 skill_set = {
@@ -19,13 +20,12 @@ intents = discord.Intents.all()
 client = commands.Bot(command_prefix="!", intents=intents)
 wl = 'WarnedList.txt'
 regex  = re.compile(r"(?i)\b((?:https?:(?:/{1,3}|[a-z0-9%])|[a-z0-9.\-]+[.](?:com|net|org|edu|tv|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|Ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)/)(?:[^\s()<>{}\[\]]+|\([^\s()]*?\([^\s()]+\)[^\s()]*?\)|\([^\s]+?\))+(?:\([^\s()]*?\([^\s()]+\)[^\s()]*?\)|\([^\s]+?\)|[^\s`!()\[\]{};:'.,<>?«»“”‘’])|(?:(?<!@)[a-z0-9]+(?:[.\-][a-z0-9]+)*[.](?:com|net|org|edu|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|Ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)\b/?(?!@)))", re.MULTILINE|re.UNICODE)
-async def clearShit(message):
-  if message.content.startswith('$clear'):
-    mgs = []
-    number = 10
-    mgs = await message.channel.history(limit=number).flatten()
-    for x in mgs:
-      await x.delete()
+async def clearShit(message,num):
+  mgs = []
+  number = num
+  mgs = await message.channel.history(limit=number).flatten()
+  for x in mgs:
+    await x.delete()
 
 async def Check_Mod_Mention(message):
   modId = 853978191387688981
@@ -49,12 +49,48 @@ async def Check_Mod_Mention(message):
 @client.event
 async def on_ready():
   print('We Have Looged in as {0.user}'.format(client))
+  while True:
+    await asyncio.sleep(10)
+    with open('spamlist.txt','r+') as file:
+      file.truncate(0)
+    
   
 @client.event
 async def on_message(message): 
   if message.author == client.user:
     return
+  
   msgkick = message 
+  #region 
+  counter = 0
+  with open('spamlist.txt','r+') as file:
+    for lines in file:
+      if lines.strip("\n") == str(message.author.id):
+        counter +=1
+    
+    file.writelines(f"{str(message.author.id)}\n")
+    if counter>5:
+      await clearShit(message,counter)
+      await message.channel.send('Spamming is not allowed!!')
+      await message.channel.send('Warning For <@%s>!!! If you continue this behaviour you will be kick out!!'% message.author.id)
+      fileWarning = file.open('spamWarning.txt','r')
+      readfile = fileWarning.read()
+      flag =0
+      if str(message.author.id) in readfile:
+        flag =1
+      fileWarning.close()
+      if flag ==1:
+        banid = message.author.id
+        msgkick.content = '!ban <@%s>'%banid
+        await client.process_commands(msgkick)
+      else:
+        file = open(wl,'a')
+        file.write('%s\n'%message.author.id)
+
+
+  #end_of_region
+  
+  
   #msgBan = message
   message_content = message.content.lower()
   #if message.content.startswith('$Hello Manager'):
@@ -98,7 +134,8 @@ async def on_message(message):
   if attachments:
     await message.delete()
     
-  await clearShit(message)
+  if message.content.startswith('$clear'):
+    await clearShit(message,10)
 
 
 async def check_rules_acceptance(channel,message,user,emoji):
