@@ -50,7 +50,7 @@ async def Check_Mod_Mention(message):
 async def on_ready():
   print('We Have Looged in as {0.user}'.format(client))
   while True:
-    await asyncio.sleep(5)
+    #await asyncio.sleep(10)
     with open('spamlist.txt','r+') as file:
       file.truncate(0)
     
