@@ -73,7 +73,7 @@ async def on_message(message):
       await clearShit(message,counter)
       await message.channel.send('Spamming is not allowed!!')
       await message.channel.send('Warning For <@%s>!!! If you continue this behaviour you will be kick out!!'% message.author.id)
-      fileWarning = file.open('spamWarning.txt','r')
+      fileWarning = open('spamWarning.txt','r')
       readfile = fileWarning.read()
       flag =0
       if str(message.author.id) in readfile:
