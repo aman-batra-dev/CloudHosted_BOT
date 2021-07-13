@@ -7,7 +7,8 @@ from discord.ext.commands import has_permissions,CheckFailure
 from discord.utils import get
 import asyncio
 
-formats = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'tiff', 'psd', 'eps', 'raw', 'mp4', 'mp3', 'mov', 'wmv', 'flv', 'avi', 'avchd', 'webm', 'mkv', 'vob', 'ogg', 'ogv', 'gifv', 'm4v', 'm4v', 'mpg', 'mp2', 'mpeg', 'mpe', 'mpv', 'svi', '3gp', '3g2', 'wav']
+#formats = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'tiff', 'psd', 'eps', 'raw', 'mp4', 'mp3', 'mov', 'wmv', 'flv', 'avi', 'avchd', 'webm', 'mkv', 'vob', 'ogg', 'ogv', 'gifv', 'm4v', 'm4v', 'mpg', 'mp2', 'mpeg', 'mpe', 'mpv', 'svi', '3gp', '3g2', 'wav']
+formats = ['gif','tiff', 'psd',]
 skill_set = {
   '\N{PERSONAL COMPUTER}': 854341269533491220,
   '\N{VIDEO GAME}': 854349627561607168,
